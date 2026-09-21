@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f2d22" />
+  <title>Kelly Outreach Ideas | Save Hemp Bev Fest</title>
+  <style>
+    :root {
+      --green-950: #081b15;
+      --green-900: #0f2d22;
+      --green-850: #15392b;
+      --green-800: #1d4635;
+      --gold: #d8b765;
+      --gold-soft: #f0d895;
+      --cream: #f8f2e4;
+      --muted: #b8c8bf;
+      --yes: #7bc58a;
+      --no: #df8c7f;
+      --line: rgba(240, 216, 149, .18);
+      --card: rgba(255,255,255,.055);
+      --shadow: 0 18px 50px rgba(0,0,0,.28);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; height: 100%; min-height: 100%; background: var(--green-950); color: var(--cream); overflow: hidden; }
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overscroll-behavior: none;
+    }
+    button, textarea { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .app {
+      height: 100dvh;
+      min-height: 0;
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      background:
+        radial-gradient(circle at 80% 0%, rgba(216,183,101,.11), transparent 33%),
+        linear-gradient(180deg, var(--green-900), var(--green-950));
+    }
+
+    .topbar {
+      padding: max(14px, env(safe-area-inset-top)) 18px 10px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(8,27,21,.82);
+      backdrop-filter: blur(14px);
+      position: relative;
+      z-index: 5;
+    }
+    .brand-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .brand { min-width: 0; }
+    .eyebrow { color: var(--gold); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; font-size: 11px; }
+    .brand h1 { margin: 3px 0 0; font-size: 17px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .step-pill { flex: 0 0 auto; border: 1px solid var(--line); border-radius: 999px; padding: 7px 10px; color: var(--gold-soft); font-size: 12px; font-weight: 800; }
+    .share-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+    .share-action { min-height: 42px; border-radius: 12px; border: 1px solid rgba(240,216,149,.24); background: rgba(216,183,101,.09); color: var(--gold-soft); font-weight: 850; cursor: pointer; }
+    .share-action.primary { background: var(--gold); color: var(--green-950); border-color: transparent; }
+    .share-fallback {
+      display: none;
+      margin-top: 8px;
+      padding: 10px;
+      border: 1px solid rgba(240,216,149,.18);
+      border-radius: 12px;
+      background: rgba(0,0,0,.14);
+    }
+    .share-fallback.show { display: block; }
+    .share-fallback input {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 10px;
+      background: rgba(255,255,255,.06);
+      color: var(--cream);
+      padding: 10px;
+      font-size: 12px;
+    }
+    .progress { height: 4px; background: rgba(255,255,255,.08); border-radius: 999px; margin-top: 10px; overflow: hidden; }
+    .progress > div { height: 100%; width: 11.11%; background: linear-gradient(90deg, var(--gold), var(--gold-soft)); transition: width .2s ease; }
+
+    main { overflow: hidden; min-height: 0; height: 100%; }
+    .slides { height: 100%; min-height: 0; overflow: hidden; position: relative; }
+    .slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 22px 18px calc(128px + env(safe-area-inset-bottom));
+      scroll-behavior: smooth;
+      overscroll-behavior-y: contain;
+      touch-action: pan-y;
+      -webkit-overflow-scrolling: touch;
+    }
+    .slide.active { display: block; }
+    .slide-inner { width: min(720px, 100%); margin: 0 auto; }
+    .slide h2 { font-size: clamp(28px, 7vw, 44px); line-height: 1.02; margin: 2px 0 12px; letter-spacing: -.03em; }
+    .slide .lede { color: #d7e0db; line-height: 1.55; margin: 0 0 18px; font-size: 16px; }
+    .gold { color: var(--gold-soft); }
+
+    .hero-card, .rule-card, .template-box, .summary-card, .target-card, .reply-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hero-card { padding: 22px; margin-top: 18px; }
+    .hero-card strong { color: var(--gold-soft); }
+    .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+    .metric { background: rgba(0,0,0,.16); border-radius: 16px; padding: 14px; border: 1px solid rgba(255,255,255,.06); }
+    .metric b { display: block; font-size: 23px; color: var(--gold-soft); }
+    .metric span { color: var(--muted); font-size: 12px; }
+
+    .bullet-list { display: grid; gap: 10px; margin: 16px 0 0; }
+    .bullet { display: flex; gap: 10px; line-height: 1.4; color: #e6ece8; }
+    .bullet .dot { width: 26px; height: 26px; flex: 0 0 26px; display: grid; place-items: center; border-radius: 50%; background: rgba(216,183,101,.13); color: var(--gold-soft); font-weight: 900; }
+
+    .rule-card { padding: 16px; margin: 14px 0; }
+    .rule-card h3, .template-box h3, .summary-card h3, .reply-card h3 { margin: 0 0 10px; font-size: 15px; color: var(--gold-soft); }
+    .rules { display: grid; gap: 8px; color: #e6ece8; font-size: 14px; line-height: 1.35; }
+
+    .template-box { padding: 15px; margin: 16px 0 14px; }
+    .template-label { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 9px; }
+    .template-label span { font-size: 12px; color: var(--muted); }
+    textarea {
+      width: 100%;
+      resize: vertical;
+      min-height: 104px;
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 14px;
+      padding: 12px 13px;
+      color: var(--cream);
+      background: rgba(0,0,0,.18);
+      outline: none;
+      line-height: 1.42;
+    }
+    textarea:focus { border-color: rgba(216,183,101,.7); box-shadow: 0 0 0 3px rgba(216,183,101,.1); }
+
+    .cards { display: grid; gap: 14px; }
+    .target-card { padding: 17px; transition: border-color .18s ease, background .18s ease, transform .18s ease; }
+    .target-card.yes { border-color: rgba(123,197,138,.62); background: rgba(123,197,138,.08); }
+    .target-card.no { border-color: rgba(223,140,127,.38); opacity: .78; }
+    .target-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .target-name { font-size: 19px; font-weight: 850; line-height: 1.15; }
+    .handle { margin-top: 4px; color: var(--gold-soft); font-size: 13px; word-break: break-word; }
+    .why { color: #c8d4ce; font-size: 13px; line-height: 1.42; margin: 10px 0 13px; }
+    .tag { display: inline-flex; align-items: center; border-radius: 999px; padding: 6px 9px; background: rgba(216,183,101,.1); border: 1px solid rgba(216,183,101,.20); color: var(--gold-soft); font-size: 11px; font-weight: 800; margin: 0 6px 6px 0; }
+    .card-note { color: var(--muted); font-size: 12px; margin: 8px 0 0; line-height: 1.4; }
+    .tracking-note { display: none; color: var(--gold-soft); font-size: 12px; margin: 10px 0 0; padding: 9px 10px; border-radius: 12px; background: rgba(216,183,101,.08); border: 1px solid rgba(216,183,101,.16); }
+    .target-card.yes .tracking-note { display: block; }
+    .dm-label { margin: 13px 0 7px; color: var(--muted); font-size: 12px; font-weight: 750; }
+    .target-card textarea { min-height: 118px; }
+
+    .decision-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .decision {
+      min-height: 48px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.045);
+      color: var(--cream);
+      font-weight: 850;
+      cursor: pointer;
+    }
+    .decision.yes.active { background: rgba(123,197,138,.18); border-color: rgba(123,197,138,.65); color: #c8f3d0; }
+    .decision.no.active { background: rgba(223,140,127,.14); border-color: rgba(223,140,127,.55); color: #ffd2ca; }
+
+    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin: 14px 0; }
+    .summary-stat { text-align: center; padding: 14px 8px; border-radius: 16px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.07); }
+    .summary-stat b { display: block; font-size: 24px; color: var(--gold-soft); }
+    .summary-stat span { font-size: 11px; color: var(--muted); }
+    .summary-card { padding: 16px; margin-bottom: 14px; }
+    #exportText { min-height: 300px; }
+    .copy-btn {
+      width: 100%; min-height: 50px; border-radius: 15px; border: 0; margin-top: 10px; cursor: pointer;
+      background: linear-gradient(135deg, #e1c16d, #f0d895); color: #162219; font-weight: 900;
+    }
+    .submit-btn {
+      width: 100%; min-height: 56px; border-radius: 16px; border: 0; margin-top: 12px; cursor: pointer;
+      background: linear-gradient(135deg, #7bc58a, #a7e2b1); color: #0b2418; font-weight: 950; font-size: 16px;
+    }
+    .submit-btn:disabled { opacity: .55; cursor: wait; }
+    .submit-status { min-height: 22px; margin-top: 9px; text-align: center; font-size: 12px; color: var(--muted); line-height: 1.4; }
+    .submit-status.ok { color: #bfe9c7; }
+    .submit-status.err { color: #ffc0b7; }
+    .submit-note { margin-top: 8px; color: var(--muted); font-size: 11px; line-height: 1.45; text-align: center; }
+    details { margin-top: 14px; }
+    summary { cursor: pointer; color: var(--gold-soft); font-weight: 850; }
+    .snippets { display: grid; gap: 10px; margin-top: 12px; }
+    .snippet { border-radius: 14px; border: 1px solid rgba(255,255,255,.08); background: rgba(0,0,0,.14); padding: 12px; font-size: 13px; line-height: 1.4; }
+    .snippet b { color: var(--gold-soft); display: block; margin-bottom: 4px; }
+
+    .bottomnav {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+      padding: 10px 14px max(10px, env(safe-area-inset-bottom));
+      display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 10px;
+      border-top: 1px solid var(--line);
+      background: rgba(8,27,21,.92);
+      backdrop-filter: blur(14px);
+    }
+    .navbtn {
+      min-height: 50px; border-radius: 15px; border: 1px solid rgba(255,255,255,.10); cursor: pointer;
+      background: rgba(255,255,255,.055); color: var(--cream); font-weight: 850;
+    }
+    .navbtn.primary { background: var(--gold); color: var(--green-950); border-color: transparent; }
+    .navbtn:disabled { opacity: .35; cursor: default; }
+    .status-mini { display: flex; align-items: center; justify-content: center; gap: 6px; color: var(--muted); font-size: 11px; text-align: center; }
+
+    .footer-note { margin-top: 18px; color: #91a59b; font-size: 11px; text-align: center; line-height: 1.5; }
+    .tiny { font-size: 12px; color: var(--muted); }
+
+    @media (min-width: 700px) {
+      .slide { padding-top: 34px; }
+      .cards { grid-template-columns: 1fr 1fr; }
+      .target-card { min-height: 100%; }
+      .bottomnav { left: 50%; right: auto; width: min(720px, calc(100% - 30px)); transform: translateX(-50%); border: 1px solid var(--line); border-bottom: 0; border-radius: 20px 20px 0 0; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand-row">
+      <div class="brand">
+        <div class="eyebrow">The Canna Joint</div>
+        <h1>Save Hemp Bev Fest · Kelly Outreach</h1>
+      </div>
+      <div class="step-pill" id="stepPill">1 / 8</div>
+    </div>
+    <div class="share-row">
+      <button class="share-action primary" id="shareDeckBtn">Share this deck</button>
+      <button class="share-action" id="copyLinkBtn">Copy link</button>
+    </div>
+    <div class="share-fallback" id="shareFallback">
+      <input id="shareUrlField" readonly value="https://breakoutaisolutions.github.io/kelly-fest-outreach/" aria-label="Deck link" />
+    </div>
+    <div class="progress"><div id="progressBar"></div></div>
+  </header>
+
+  <main>
+    <div class="slides" id="slides">
+      <section class="slide active" data-title="Intro">
+        <div class="slide-inner">
+          <div class="eyebrow">Kelly · quick review</div>
+          <h2>Hey Kelly — a few <span class="gold">outreach ideas</span> for the fest.</h2>
+          <p class="lede">Tap Yes or No on each target. Edit one DM for each section. Nothing sends from this site.</p>
+          <div class="hero-card">
+            <strong>Save Hemp Bev Fest</strong><br />
+            Foothills Brewing downtown brewpub<br />
+            638 W 4th St · Winston Salem, NC 27101<br />
+            <span class="tiny">Triad focus · Winston Salem · Greensboro · High Point · nearby towns</span>
+            <div class="hero-grid">
+              <div class="metric"><b>21+</b><span>Adult audience only</span></div>
+              <div class="metric"><b>8</b><span>Quick review sections</span></div>
+            </div>
+          </div>
+          <div class="bullet-list">
+            <div class="bullet"><span class="dot">1</span><span>Choose the targets you want.</span></div>
+            <div class="bullet"><span class="dot">2</span><span>Edit one DM per section. That message applies to every approved target in that section.</span></div>
+            <div class="bullet"><span class="dot">3</span><span>Submit your final picks to Dave on the last page.</span></div>
+          </div>
+          <p class="footer-note">21+ only. One follow up after 4 days. Media stays with Aria.</p>
+        </div>
+      </section>
+
+      <section class="slide" data-group="shops" data-title="Hemp + smoke shops"><div class="slide-inner"></div></section>
+      <section class="slide" data-group="breweries" data-title="Breweries + venues"><div class="slide-inner"></div></section>
+      <section class="slide" data-group="culture" data-title="Culture shops"><div class="slide-inner"></div></section>
+      <section class="slide" data-group="creators" data-title="Local creators"><div class="slide-inner"></div></section>
+      <section class="slide" data-group="vip" data-title="VIP ask"><div class="slide-inner"></div></section>
+      <section class="slide" data-group="media" data-title="Media"><div class="slide-inner"></div></section>
+
+      <section class="slide" data-title="Summary">
+        <div class="slide-inner">
+          <div class="eyebrow">Final review</div>
+          <h2>Your <span class="gold">Yes list</span></h2>
+          <p class="lede">Review the final summary, then submit it directly to Dave. Each section has one shared DM for all approved targets.</p>
+          <div class="summary-grid">
+            <div class="summary-stat"><b id="yesCount">0</b><span>Yes</span></div>
+            <div class="summary-stat"><b id="noCount">0</b><span>No</span></div>
+            <div class="summary-stat"><b id="openCount">0</b><span>Open</span></div>
+          </div>
+          <div class="summary-card">
+            <h3>Approved targets + section DMs</h3>
+            <textarea id="exportText" spellcheck="false"></textarea>
+            <button class="copy-btn" id="copyBtn">Copy approval summary</button>
+            <button class="submit-btn" id="submitDaveBtn">Submit My Picks to Dave</button>
+            <div class="submit-status" id="submitStatus"></div>
+            <div class="submit-note">This sends your Yes, No, open items, and the one edited DM for each section to Dave automatically.</div>
+          </div>
+          <div class="reply-card" style="padding:16px;">
+            <h3>If they reply</h3>
+            <details>
+              <summary>Open reply snippets</summary>
+              <div class="snippets">
+                <div class="snippet"><b>Yes</b>Amazing. Sending the QR + one-pager now. Unique code for you: [CODE]. Two comps under the name you want on the list. When’s a good drop-by window?</div>
+                <div class="snippet"><b>Maybe</b>No rush. I can email a 4-line one-pager to whoever decides. What’s the best address?</div>
+                <div class="snippet"><b>They want $</b>Totally fair. I can do the comp tickets / VIP +1 for content. Paid rates I have to run by the organizer — I’ll check and come back once.</div>
+                <div class="snippet"><b>No</b>All good — thanks for the look. If you want flyers later, I’m around.</div>
+                <div class="snippet"><b>4-day bump</b>Quick bump in case this got buried — happy to send the one-pager only. If not a fit, all good.</div>
+              </div>
+            </details>
+          </div>
+          <p class="footer-note">21+ only · One follow up max · No paid offers without organizer approval · Media replies go to Aria</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <nav class="bottomnav">
+    <button class="navbtn" id="prevBtn">Back</button>
+    <div class="status-mini" id="sectionName">Intro</div>
+    <button class="navbtn primary" id="nextBtn">Next</button>
+  </nav>
+</div>
+
+<script>
+const groups = {
+  shops: {
+    eyebrow: 'Outreach group 1',
+    title: 'Hemp + smoke shops',
+    intro: 'Ask for a counter QR and a few flyers. Offer 2 owner comps plus a staff tasting. Keep it adult only.',
+    template: 'Hey, The Canna Joint here. We’re throwing Save Hemp Bev Fest at Foothills. 21+. Can we leave a QR + a few flyers for your adult customers? Two comps for the shop.',
+    offer: '2 owner comps + staff tasting + counter QR + 10–25 flyers',
+    targets: [
+      { id:'essential', name:'Essential Hemp', handle:'@essentialhempnc', why:'Greensboro hemp shop and a direct adult retail audience.', code:'IG-ESSENTIAL', dm:'Hey Essential, The Canna Joint here. We’re throwing Save Hemp Bev Fest at Foothills. 21+. Counter QR + a few flyers for your people? Two comps for the shop.' },
+      { id:'apotheca', name:'Apotheca', handle:'@apothecahealth', why:'Multi-store opportunity. Ask who handles Winston Salem, Greensboro and High Point.', code:'IG-APOTHECA', dm:'Hey Apotheca, The Canna Joint here. Save Hemp Bev Fest at Foothills. 21+. Flyers + checkout QR at the shops that want it? Two comps per store that joins.' },
+      { id:'shays-gso', name:'Smokey Shay’s GSO', handle:'@smokeyshaysgso', why:'Greensboro shop with a relevant adult customer base.', code:'IG-SHAYS-GSO', dm:'Hey Shay’s, The Canna Joint here. We’re throwing Save Hemp Bev Fest at Foothills. 21+. Leave a QR on the counter? Two comps for the shop.' },
+      { id:'shays-hp', name:'Smokey Shay’s HP', handle:'@smokey_shays_hp', why:'High Point location expands the Triad footprint.', code:'IG-SHAYS-HP', dm:'Hey Shay’s HP, The Canna Joint here. Save Hemp Bev Fest at Foothills. 21+. Counter QR + flyers? Two comps for the shop.' },
+      { id:'celestial', name:'Celestial Wellness', handle:'Confirm handle in Instagram before send', why:'Potential shop target. Handle must be confirmed in app before any DM.', note:'If no live Instagram is found, mark walk-in only. Do not invent a handle.', dm:'Hey Celestial, The Canna Joint here. We’re throwing Save Hemp Bev Fest at Foothills. 21+. Flyers + a QR for your adult customers? Two comps.' }
+    ]
+  },
+  breweries: {
+    eyebrow: 'Outreach group 2',
+    title: 'Breweries + venues',
+    intro: 'Same crowd as a good tap night. Ask for a Story and a small bar stack. Offer 2 staff tickets.',
+    template: 'Hey, The Canna Joint here. We’re throwing Save Hemp Bev Fest at Foothills. Same crowd as a good tap night. Story + a small stack at the bar? Two tickets for the team.',
+    offer: '2 staff tickets + bar stack + Story',
+    targets: [
+      { id:'foothills', name:'Foothills Brewing / Brewpub', handle:'@foothillsbrewing / @foothillsbrewpub', why:'Host venue. Internal coordination only.', note:'DO NOT COLD DM. Confirm Story + QR internally.', dm:'Internal: confirm Save Hemp Bev Fest Story support + QR placement at the host venue. No cold DM.' },
+      { id:'incendiary', name:'Incendiary', handle:'@incendiarybrew', why:'Relevant brewery audience in the Winston Salem market.', code:'IG-INCEND', dm:'Hey Incendiary, The Canna Joint here. We’re throwing Save Hemp Bev Fest at Foothills. 21+. Story + a small stack at the bar? Two tickets for the team.' },
+      { id:'ramkat', name:'The Ramkat', handle:'@theramkat', why:'Ask about a box office or Gas Hill stack during event week.', code:'IG-RAMKAT', dm:'Hey Ramkat, The Canna Joint here. Save Hemp Bev Fest at Foothills. 21+. Could we leave a small stack at box office / Gas Hill that week? Two tickets for the team.' },
+      { id:'joymongers', name:'Joymongers', handle:'@joymongers_winston', why:'Local brewery audience that overlaps with event night traffic.', dm:'Hey Joymongers, The Canna Joint here. We’re throwing Save Hemp Bev Fest at Foothills. 21+. Story + a small stack at the bar? Two tickets for the team.' },
+      { id:'smallbatch', name:'Small Batch', handle:'@smallbatchbeerco', why:'Downtown adult beverage audience.', dm:'Hey Small Batch, The Canna Joint here. Save Hemp Bev Fest at Foothills. 21+. Story + a small stack at the bar? Two tickets for the team.' },
+      { id:'dubois', name:'Brouwerij Dubois', handle:'@brouwerijdubois', why:'Another brewery audience inside the Triad radius.', dm:'Hey Brouwerij Dubois, The Canna Joint here. We’re throwing Save Hemp Bev Fest at Foothills. 21+. Story + a small bar stack? Two tickets for the team.' },
+      { id:'roar', name:'ROAR', handle:'@roar.ws', why:'Entertainment venue reach. Keep outreach strictly 21+ door focused.', note:'21+ door only.', dm:'Hey ROAR, The Canna Joint here. Save Hemp Bev Fest at Foothills. 21+. Could we do a Story + a small stack for your 21+ crowd? Two tickets for the team.' }
+    ]
+  },
+  culture: {
+    eyebrow: 'Outreach group 3',
+    title: 'Culture shops',
+    intro: 'Keep it local and physical. Two tickets plus a window or counter card. Offer to drop it off.',
+    template: 'Hey, The Canna Joint here. We’re throwing Save Hemp Bev Fest at Foothills on 4th. Window card or counter stack? Two tickets for the shop. I can drop it this week.',
+    offer: '2 tickets + window/counter card + walk-in drop after yes',
+    targets: [
+      { id:'tattooarchive', name:'Tattoo Archive', handle:'Confirm Instagram', why:'Next door to Foothills. Walk-in first is stronger than a cold DM.', note:'Walk-in first. Confirm IG before any message.', dm:'Hey, The Canna Joint here. We’re throwing Save Hemp Bev Fest next door at Foothills on 4th. 21+. Window card or counter stack? Two tickets for the shop. I can drop it this week.' },
+      { id:'lowfive', name:'Low Five Archive', handle:'@lowfivearchive', why:'Local culture audience and a natural window/counter placement ask.', code:'IG-LOWFIVE', dm:'Hey Low Five, The Canna Joint here. We’re throwing Save Hemp Bev Fest at Foothills on 4th. 21+. Window card or counter stack? Two tickets for the shop. I can drop it this week.' }
+    ]
+  },
+  creators: {
+    eyebrow: 'Outreach group 4',
+    title: 'Local creators',
+    intro: 'Offer 2 tasting passes for 1 Reel + 1 Story with the QR. Check recent content before sending.',
+    template: 'Hey, The Canna Joint here. We’re throwing Save Hemp Bev Fest at Foothills. 21+. Two tasting passes if you’ll do 1 Reel + 1 Story with our QR.',
+    offer: '2 tasting passes for 1 Reel + 1 Story + QR',
+    targets: [
+      { id:'foodie', name:'A Foodie And Her Travels', handle:'@afoodieandhertravels', why:'Food and local experience content is a natural event fit.', code:'IG-FOODIE', dm:'Hey, The Canna Joint here. We’re throwing Save Hemp Bev Fest at Foothills. 21+. Two tasting passes if you’ll do 1 Reel + 1 Story with our QR.' },
+      { id:'noms', name:'All About Noms', handle:'@all.about.noms', why:'Food focused audience that can translate well to tasting content.', dm:'Hey, The Canna Joint here. Save Hemp Bev Fest is at Foothills. 21+. Two tasting passes if you’ll do 1 Reel + 1 Story with our QR.' },
+      { id:'pree', name:'The Official Pree', handle:'@theofficialpree', why:'Use only if recent posts are still Triad focused.', note:'Check recent posts first. Skip if content is now mainly NYC.', dm:'Hey, The Canna Joint here. We’re throwing Save Hemp Bev Fest at Foothills. 21+. Two tasting passes if you’ll do 1 Reel + 1 Story with our QR.' },
+      { id:'moroccan', name:'Rockin Moroccan GSO', handle:'@rockinmoroccan_gso', why:'Already posts brewery nights, so the audience fit is easy to explain.', dm:'Hey, The Canna Joint here. Save Hemp Bev Fest at Foothills. 21+. You already cover brewery nights, so this felt like a fit. Two tasting passes for 1 Reel + 1 Story with our QR?' },
+      { id:'brooke', name:'Brooke Taryn Artistry', handle:'@brooketarynartistry', why:'Potential local lifestyle reach, but only if recent content fits.', note:'Watch the last 8 posts. Skip if the feed is family or hosting only.', dm:'Hey, The Canna Joint here. We’re throwing Save Hemp Bev Fest at Foothills. 21+. Two tasting passes if you’ll do 1 Reel + 1 Story with our QR.' }
+    ]
+  },
+  vip: {
+    eyebrow: 'Outreach group 5',
+    title: 'VIP ask',
+    intro: 'Use this selectively for bigger names or creators who respond especially well. Lead with VIP, not tasting.',
+    template: 'Hey, The Canna Joint here. Putting a small VIP list together for Save Hemp Bev Fest at Foothills. Comp VIP +1 if you post 1 Reel + 1 Story with our QR the week of. Interested?',
+    offer: 'VIP +1 for 1 Reel + 1 Story the week of',
+    targets: [
+      { id:'chime', name:'Mr. Chime Time', handle:'@mr.chimetime', why:'Lead with VIP, not a standard tasting pass.', code:'IG-VIP', dm:'Hey, The Canna Joint here. Putting a small VIP list together for Save Hemp Bev Fest at Foothills. 21+. Comp VIP +1 if you post 1 Reel + 1 Story with our QR the week of. Interested?' },
+      { id:'erica', name:'A Little Bit of Erica', handle:'@alittlebitof_erica', why:'Large Winston Salem following. Use only if the current content feels brand safe.', note:'Check current feed before send.', code:'IG-VIP', dm:'Hey, The Canna Joint here. Putting a small VIP list together for Save Hemp Bev Fest at Foothills. 21+. Comp VIP +1 if you post 1 Reel + 1 Story with our QR the week of. Interested?' },
+      { id:'vip-bump', name:'Creator who replied well', handle:'Generic upgrade card', why:'If a creator responds strongly, consider bumping the offer to VIP +1.', code:'IG-VIP', dm:'Love it. We can bump this to VIP +1 for the fest if you’re up for 1 Reel + 1 Story with our QR the week of. Interested?' }
+    ]
+  },
+  media: {
+    eyebrow: 'Aria only',
+    title: 'Media',
+    intro: 'Kelly does not pitch media. Use these only as an approval list for Aria. If media replies to Kelly, screenshot it and send it to Aria.',
+    template: 'Hi — Aria with Canna Joint. Save Hemp Bev Fest at Foothills, Winston-Salem. 21+. Brief + photo + ticket link if it fits your calendar. Comp media pair if useful.',
+    offer: 'Media pair + brief + photo. Aria sends.',
+    targets: [
+      { id:'goto', name:'The Go To Winston Salem', handle:'@thegotowinstonsalem', why:'Local Winston Salem events and discovery audience.', code:'MEDIA-GOTO', dm:'Hi — Aria with Canna Joint. Save Hemp Bev Fest at Foothills, Winston-Salem. 21+. Brief + photo + ticket link if it fits your calendar. Comp media pair if useful.' },
+      { id:'edt', name:'Eat Drink Triad', handle:'@eatdrinktriad', why:'Triad food and drink audience.', code:'MEDIA-EDT', dm:'Hi — Aria with Canna Joint. Save Hemp Bev Fest at Foothills, Winston-Salem. 21+. Brief + photo + ticket link if it fits your calendar. Comp media pair if useful.' },
+      { id:'visit', name:'Visit Winston Salem', handle:'@visitwinstonsalem', why:'Local destination and event visibility.', code:'MEDIA-VISIT', dm:'Hi — Aria with Canna Joint. Save Hemp Bev Fest at Foothills, Winston-Salem. 21+. Brief + photo + ticket link if it fits your calendar. Comp media pair if useful.' },
+      { id:'media-email', name:'FOX8 / WFMY / Yes! Weekly / Triad City Beat', handle:'Email, not Instagram', why:'Traditional media targets. Keep outreach in Aria’s media lane.', note:'Email only. Kelly does not pitch these.', dm:'Hi — Aria with Canna Joint. Save Hemp Bev Fest at Foothills, Winston-Salem. 21+. Brief + photo + ticket link if it fits your calendar. Comp media pair if useful.' }
+    ]
+  }
+};
+
+const STORAGE_KEY = 'cannaJointKellyFestOutreachV1';
+let state = {};
+
+try {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  state = saved ? (JSON.parse(saved) || {}) : {};
+} catch (e) {
+  // Some in-app browsers block localStorage entirely.
+  // Keep the deck fully functional even when autosave is unavailable.
+  state = {};
+}
+
+if (!state.decisions || typeof state.decisions !== 'object') state.decisions = {};
+if (!state.templates || typeof state.templates !== 'object') state.templates = {};
+
+let current = Math.min(Math.max(Number(state.current || 0), 0), 8);
+
+function save() {
+  state.current = current;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    // Navigation and editing must continue even if browser storage is blocked.
+  }
+}
+
+function esc(s='') {
+  return String(s == null ? '' : s).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+}
+
+function renderGroups() {
+  document.querySelectorAll('[data-group]').forEach(section => {
+    const key = section.dataset.group;
+    const g = groups[key];
+    const inner = section.querySelector('.slide-inner');
+    const tpl = state.templates[key] ?? g.template;
+    inner.innerHTML = `
+      <div class="eyebrow">${esc(g.eyebrow)}</div>
+      <h2>${esc(g.title)}</h2>
+      <p class="lede">${esc(g.intro)}</p>
+      <div class="template-box">
+        <div class="template-label"><h3>One DM for this section</h3><span>Edit once</span></div>
+        <textarea class="group-template" data-group-key="${key}" spellcheck="true">${esc(tpl)}</textarea>
+        <div class="card-note">This DM applies to every target you approve below.</div><div class="card-note"><strong>Offer:</strong> ${esc(g.offer)}</div>
+      </div>
+      <div class="cards">${g.targets.map(t => cardHTML(key,t)).join('')}</div>
+      <p class="footer-note">21+ only · One follow up after 4 days · Then stop</p>
+    `;
+  });
+}
+
+function cardHTML(groupKey, t) {
+  const decision = state.decisions[t.id] || '';
+  return `
+    <article class="target-card ${decision}" data-target="${t.id}">
+      <div class="target-head">
+        <div>
+          <div class="target-name">${esc(t.name)}</div>
+          <div class="handle">${esc(t.handle)}</div>
+        </div>
+      </div>
+      <div class="why">${esc(t.why)}</div>
+      <span class="tag">21+</span><span class="tag">${esc(groups[groupKey].title)}</span>
+      ${t.note ? `<div class="card-note">${esc(t.note)}</div>` : ''}
+      ${t.code ? `<div class="tracking-note">Tracking note: <strong>${esc(t.code)}</strong> · ticketURL?src=${esc(t.code)}</div>` : ''}
+      <div class="decision-row">
+        <button class="decision yes ${decision==='yes'?'active':''}" data-choice="yes" data-id="${t.id}">✓ Yes</button>
+        <button class="decision no ${decision==='no'?'active':''}" data-choice="no" data-id="${t.id}">✕ No</button>
+      </div>
+    </article>`;
+}
+
+function allTargets() {
+  return Object.entries(groups).flatMap(([groupKey,g]) => g.targets.map(t => ({...t, groupKey, groupTitle:g.title})));
+}
+
+function updateSummary() {
+  const targets = allTargets();
+  const yes = targets.filter(t => state.decisions[t.id] === 'yes');
+  const no = targets.filter(t => state.decisions[t.id] === 'no');
+  const open = targets.length - yes.length - no.length;
+
+  document.getElementById('yesCount').textContent = yes.length;
+  document.getElementById('noCount').textContent = no.length;
+  document.getElementById('openCount').textContent = open;
+
+  const lines = [];
+  lines.push('KELLY APPROVALS · SAVE HEMP BEV FEST');
+  lines.push(`Approved: ${yes.length} | No: ${no.length} | Open: ${open}`);
+  lines.push('');
+
+  const approvedByGroup = Object.entries(groups)
+    .map(([groupKey, group]) => ({
+      groupKey,
+      group,
+      approved: group.targets.filter(t => state.decisions[t.id] === 'yes')
+    }))
+    .filter(x => x.approved.length);
+
+  if (!approvedByGroup.length) {
+    lines.push('No targets approved yet.');
+    lines.push('');
+  }
+
+  approvedByGroup.forEach(({groupKey, group, approved}) => {
+    lines.push(group.title.toUpperCase());
+    lines.push(`DM FOR THIS SECTION: ${state.templates[groupKey] ?? group.template}`);
+    lines.push('Approved targets:');
+    approved.forEach(t => {
+      lines.push(`• ${t.name}${t.handle ? ' · ' + t.handle : ''}${t.code ? ' · ' + t.code : ''}`);
+    });
+    lines.push('');
+  });
+
+  lines.push('REMINDERS');
+  lines.push('21+ only. One follow up after 4 days. Then stop.');
+  lines.push('No cash offer unless organizer approves.');
+  lines.push('Media is Aria. Kelly screenshots any media reply to Aria.');
+  lines.push('Fill [DATE] and [TICKET] before any real send.');
+
+  document.getElementById('exportText').value = lines.join('\\n');
+}
+
+function updateView(scrollTop=true) {
+  const slideList = Array.from(document.querySelectorAll('.slide'));
+  slideList.forEach((slide, i) => slide.classList.toggle('active', i === current));
+
+  document.getElementById('stepPill').textContent = `${current+1} / 8`;
+  document.getElementById('progressBar').style.width = `${((current+1)/8)*100}%`;
+
+  const slide = slideList[current];
+  document.getElementById('sectionName').textContent = slide.dataset.title;
+  document.getElementById('prevBtn').disabled = current === 0;
+  document.getElementById('nextBtn').textContent = current === 7 ? 'Copy' : 'Next';
+
+  if (current === 7) updateSummary();
+  if (scrollTop) slide.scrollTop = 0;
+  save();
+}
+
+function move(dir) {
+  if (current === 7 && dir > 0) return copySummary();
+  current = Math.min(7, Math.max(0, current + dir));
+  updateView();
+}
+
+async function copySummary() {
+  updateSummary();
+  const txt = document.getElementById('exportText').value;
+  let copied = false;
+
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(txt);
+      copied = true;
+    }
+  } catch (e) {}
+
+  if (!copied) {
+    try {
+      const box = document.getElementById('exportText');
+      box.focus();
+      box.select();
+      copied = document.execCommand('copy');
+    } catch (e) {}
+  }
+
+  const btn = document.getElementById('copyBtn');
+  const old = btn.textContent;
+  btn.textContent = copied ? 'Copied ✓' : 'Select text to copy';
+  setTimeout(() => btn.textContent = old, 1600);
+}
+
+async function submitToDave() {
+  updateSummary();
+
+  const btn = document.getElementById('submitDaveBtn');
+  const status = document.getElementById('submitStatus');
+  const targets = allTargets();
+  const yes = targets.filter(t => state.decisions[t.id] === 'yes');
+  const no = targets.filter(t => state.decisions[t.id] === 'no');
+  const open = targets.filter(t => !state.decisions[t.id]);
+
+  const templateEdits = Object.entries(groups).map(([key, g]) => {
+    const value = state.templates[key] ?? g.template;
+    return `${g.title}: ${value}`;
+  }).join('\n\n');
+
+  const allDecisions = targets.map(t => {
+    const decision = (state.decisions[t.id] || 'open').toUpperCase();
+    const groupMessage = state.templates[t.groupKey] ?? groups[t.groupKey].template;
+    return `${decision} | ${t.groupTitle} | ${t.name}${t.handle ? ' | ' + t.handle : ''}
+SECTION DM: ${groupMessage}`;
+  }).join('\\n\\n');
+
+  const payload = {
+    _subject: 'Kelly submitted Save Hemp Bev Fest outreach picks',
+    submitted_by: 'Kelly',
+    event: 'Save Hemp Bev Fest',
+    approved_count: String(yes.length),
+    declined_count: String(no.length),
+    open_count: String(open.length),
+    approved_summary: document.getElementById('exportText').value,
+    all_decisions: allDecisions,
+    group_templates: templateEdits,
+    page_url: location.origin + location.pathname,
+    submitted_at: new Date().toLocaleString()
+  };
+
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+  status.className = 'submit-status';
+  status.textContent = '';
+
+  try {
+    const response = await fetch('https://formsubmit.co/ajax/dave@breakoutaisolutions.com', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok || result.success === false) {
+      throw new Error(result.message || 'Submission could not be sent.');
+    }
+
+    state.lastSubmittedAt = new Date().toISOString();
+    save();
+    btn.textContent = 'Submitted to Dave ✓';
+    status.className = 'submit-status ok';
+    status.textContent = 'Done. Dave has your selections and edited messages.';
+  } catch (error) {
+    btn.disabled = false;
+    btn.textContent = 'Submit My Picks to Dave';
+    status.className = 'submit-status err';
+    status.textContent = 'Could not send yet. Please try again.';
+  }
+}
+
+function showShareFallback() {
+  const url = location.origin + location.pathname;
+  const panel = document.getElementById('shareFallback');
+  const field = document.getElementById('shareUrlField');
+  field.value = url;
+  panel.classList.add('show');
+  field.focus();
+  field.select();
+}
+
+async function copyDeckLink() {
+  const url = location.origin + location.pathname;
+  let copied = false;
+
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(url);
+      copied = true;
+    }
+  } catch (e) {}
+
+  if (!copied) {
+    try {
+      const temp = document.createElement('textarea');
+      temp.value = url;
+      temp.setAttribute('readonly', '');
+      temp.style.position = 'fixed';
+      temp.style.opacity = '0';
+      document.body.appendChild(temp);
+      temp.focus();
+      temp.select();
+      copied = document.execCommand('copy');
+      temp.remove();
+    } catch (e) {}
+  }
+
+  const btn = document.getElementById('copyLinkBtn');
+  const old = btn.textContent;
+
+  if (copied) {
+    btn.textContent = 'Link copied ✓';
+    setTimeout(() => btn.textContent = old, 1500);
+  } else {
+    showShareFallback();
+    btn.textContent = 'Link ready to copy';
+    setTimeout(() => btn.textContent = old, 1800);
+  }
+}
+
+async function shareDeck() {
+  const url = location.origin + location.pathname;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: 'Save Hemp Bev Fest outreach ideas',
+        text: 'Kelly, here are the outreach ideas for review.',
+        url
+      });
+      return;
+    } catch (e) {
+      if (e && e.name === 'AbortError') return;
+    }
+  }
+
+  showShareFallback();
+}
+
+renderGroups();
+updateView(false);
+
+addEventListener('input', e => {
+  if (e.target.matches('.group-template')) {
+    state.templates[e.target.dataset.groupKey] = e.target.value;
+    save();
+  }
+});
+
+document.addEventListener('click', e => {
+  const d = e.target.closest('.decision');
+  if (d) {
+    const id = d.dataset.id;
+    const choice = d.dataset.choice;
+    state.decisions[id] = state.decisions[id] === choice ? '' : choice;
+    save();
+    renderGroups();
+    updateSummary();
+    return;
+  }
+});
+
+document.getElementById('prevBtn').addEventListener('click', () => move(-1));
+document.getElementById('nextBtn').addEventListener('click', () => move(1));
+document.getElementById('copyBtn').addEventListener('click', copySummary);
+document.getElementById('submitDaveBtn').addEventListener('click', submitToDave);
+document.getElementById('shareDeckBtn').addEventListener('click', shareDeck);
+document.getElementById('copyLinkBtn').addEventListener('click', copyDeckLink);
+
+document.getElementById('exportText').addEventListener('input', e => {
+  // Export box is intentionally free-editable, but source card data stays unchanged.
+});
+
+// Slide navigation uses the visible Back and Next buttons so vertical scrolling stays reliable on iPhone and iPad.
+</script>
+</body>
+</html>
